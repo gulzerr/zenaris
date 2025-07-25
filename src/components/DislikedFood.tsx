@@ -1,11 +1,30 @@
-import { useState } from 'react';
-import { DislikedFood as DislikedFoodType, FoodCategory, DislikeSeverity, FOOD_CATEGORIES, DISLIKE_SEVERITIES } from '../types/index';
-import { getAriaLabel, getSeverityColor, getSeverityIcon } from '../utils/index';
+import { useState } from "react";
+import {
+  DislikedFood as DislikedFoodType,
+  FoodCategory,
+  DislikeSeverity,
+  FOOD_CATEGORIES,
+  DISLIKE_SEVERITIES,
+} from "../types/index";
+import {
+  getAriaLabel,
+  getSeverityColor,
+  getSeverityIcon,
+} from "../utils/index";
 
 interface DislikedFoodProps {
   dislikedFood: DislikedFoodType[];
-  onAdd: (name: string, severity: DislikeSeverity, category?: FoodCategory) => void;
-  onUpdate: (id: string, name: string, severity: DislikeSeverity, category?: FoodCategory) => void;
+  onAdd: (
+    name: string,
+    severity: DislikeSeverity,
+    category?: FoodCategory
+  ) => void;
+  onUpdate: (
+    id: string,
+    name: string,
+    severity: DislikeSeverity,
+    category?: FoodCategory
+  ) => void;
   onRemove: (id: string) => void;
 }
 
@@ -15,25 +34,26 @@ export const DislikedFood = ({
   onUpdate,
   onRemove,
 }: DislikedFoodProps) => {
-  const [newFoodName, setNewFoodName] = useState('');
-  const [newFoodCategory, setNewFoodCategory] = useState<FoodCategory | ''>('');
-  const [newFoodSeverity, setNewFoodSeverity] = useState<DislikeSeverity>('mild');
+  const [newFoodName, setNewFoodName] = useState("");
+  const [newFoodCategory, setNewFoodCategory] = useState<FoodCategory | "">("");
+  const [newFoodSeverity, setNewFoodSeverity] =
+    useState<DislikeSeverity>("mild");
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editName, setEditName] = useState('');
-  const [editCategory, setEditCategory] = useState<FoodCategory | ''>('');
-  const [editSeverity, setEditSeverity] = useState<DislikeSeverity>('mild');
+  const [editName, setEditName] = useState("");
+  const [editCategory, setEditCategory] = useState<FoodCategory | "">("");
+  const [editSeverity, setEditSeverity] = useState<DislikeSeverity>("mild");
 
   const handleAdd = () => {
     if (newFoodName.trim()) {
       onAdd(newFoodName, newFoodSeverity, newFoodCategory || undefined);
-      setNewFoodName('');
-      setNewFoodCategory('');
-      setNewFoodSeverity('mild');
+      setNewFoodName("");
+      setNewFoodCategory("");
+      setNewFoodSeverity("mild");
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleAdd();
     }
   };
@@ -41,7 +61,7 @@ export const DislikedFood = ({
   const startEdit = (food: DislikedFoodType) => {
     setEditingId(food.id);
     setEditName(food.name);
-    setEditCategory(food.category || '');
+    setEditCategory(food.category || "");
     setEditSeverity(food.severity);
   };
 
@@ -49,23 +69,23 @@ export const DislikedFood = ({
     if (editingId && editName.trim()) {
       onUpdate(editingId, editName, editSeverity, editCategory || undefined);
       setEditingId(null);
-      setEditName('');
-      setEditCategory('');
-      setEditSeverity('mild');
+      setEditName("");
+      setEditCategory("");
+      setEditSeverity("mild");
     }
   };
 
   const cancelEdit = () => {
     setEditingId(null);
-    setEditName('');
-    setEditCategory('');
-    setEditSeverity('mild');
+    setEditName("");
+    setEditCategory("");
+    setEditSeverity("mild");
   };
 
   const handleEditKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       saveEdit();
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       cancelEdit();
     }
   };
@@ -77,7 +97,8 @@ export const DislikedFood = ({
         Disliked Foods
       </h2>
       <p className="text-gray-600 mb-4">
-        Add foods this person dislikes or refuses to eat. Specify how strong their dislike is.
+        Add foods this person dislikes or refuses to eat. Specify how strong
+        their dislike is.
       </p>
 
       {/* Add new disliked food */}
@@ -106,7 +127,9 @@ export const DislikedFood = ({
               <select
                 id="new-disliked-category"
                 value={newFoodCategory}
-                onChange={(e) => setNewFoodCategory(e.target.value as FoodCategory | '')}
+                onChange={(e) =>
+                  setNewFoodCategory(e.target.value as FoodCategory | "")
+                }
                 className="input-field"
               >
                 <option value="">Any meal</option>
@@ -120,13 +143,18 @@ export const DislikedFood = ({
           </div>
           <div className="flex flex-col sm:flex-row gap-3 items-end">
             <div className="flex-1">
-              <label htmlFor="new-disliked-severity" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="new-disliked-severity"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Dislike Level
               </label>
               <select
                 id="new-disliked-severity"
                 value={newFoodSeverity}
-                onChange={(e) => setNewFoodSeverity(e.target.value as DislikeSeverity)}
+                onChange={(e) =>
+                  setNewFoodSeverity(e.target.value as DislikeSeverity)
+                }
                 className="input-field"
               >
                 {DISLIKE_SEVERITIES.map((severity) => (
@@ -140,14 +168,15 @@ export const DislikedFood = ({
               onClick={handleAdd}
               disabled={!newFoodName.trim()}
               className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label={getAriaLabel('Add', 'disliked food')}
+              aria-label={getAriaLabel("Add", "disliked food")}
             >
               Add Food
             </button>
           </div>
         </div>
         <p id="disliked-food-help" className="text-sm text-gray-500 mt-2">
-          Be specific about the dislike level to help caregivers make better meal decisions.
+          Be specific about the dislike level to help caregivers make better
+          meal decisions.
         </p>
       </div>
 
@@ -174,11 +203,13 @@ export const DislikedFood = ({
                     onKeyPress={handleEditKeyPress}
                     className="input-field flex-1 min-w-0"
                     autoFocus
-                    aria-label={getAriaLabel('Edit', food.name)}
+                    aria-label={getAriaLabel("Edit", food.name)}
                   />
                   <select
                     value={editCategory}
-                    onChange={(e) => setEditCategory(e.target.value as FoodCategory | '')}
+                    onChange={(e) =>
+                      setEditCategory(e.target.value as FoodCategory | "")
+                    }
                     className="input-field w-32"
                   >
                     <option value="">Any meal</option>
@@ -190,7 +221,9 @@ export const DislikedFood = ({
                   </select>
                   <select
                     value={editSeverity}
-                    onChange={(e) => setEditSeverity(e.target.value as DislikeSeverity)}
+                    onChange={(e) =>
+                      setEditSeverity(e.target.value as DislikeSeverity)
+                    }
                     className="input-field w-40"
                   >
                     {DISLIKE_SEVERITIES.map((severity) => (
@@ -220,15 +253,31 @@ export const DislikedFood = ({
                 <>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-medium text-gray-800">{food.name}</span>
+                      <span className="font-medium text-gray-800">
+                        {food.name}
+                      </span>
                       {food.category && (
                         <span className="px-2 py-1 text-xs bg-primary-100 text-primary-700 rounded-full">
-                          {FOOD_CATEGORIES.find(c => c.value === food.category)?.label}
+                          {
+                            FOOD_CATEGORIES.find(
+                              (c) => c.value === food.category
+                            )?.label
+                          }
                         </span>
                       )}
-                      <span className={`px-2 py-1 text-xs rounded-full border ${getSeverityColor(food.severity)}`}>
-                        <span className="mr-1">{getSeverityIcon(food.severity)}</span>
-                        {DISLIKE_SEVERITIES.find(s => s.value === food.severity)?.label}
+                      <span
+                        className={`px-2 py-1 text-xs rounded-full border ${getSeverityColor(
+                          food.severity
+                        )}`}
+                      >
+                        <span className="mr-1">
+                          {getSeverityIcon(food.severity)}
+                        </span>
+                        {
+                          DISLIKE_SEVERITIES.find(
+                            (s) => s.value === food.severity
+                          )?.label
+                        }
                       </span>
                     </div>
                   </div>
@@ -236,14 +285,14 @@ export const DislikedFood = ({
                     <button
                       onClick={() => startEdit(food)}
                       className="text-blue-600 hover:text-blue-800 p-1"
-                      aria-label={getAriaLabel('Edit', food.name)}
+                      aria-label={getAriaLabel("Edit", food.name)}
                     >
                       ✏️
                     </button>
                     <button
                       onClick={() => onRemove(food.id)}
                       className="text-red-600 hover:text-red-800 p-1"
-                      aria-label={getAriaLabel('Remove', food.name)}
+                      aria-label={getAriaLabel("Remove", food.name)}
                     >
                       🗑️
                     </button>

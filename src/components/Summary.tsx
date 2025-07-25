@@ -1,5 +1,10 @@
-import { MealPreferences, FOOD_CATEGORIES, ALLERGY_SEVERITIES, DISLIKE_SEVERITIES } from '../types/index';
-import { getSeverityColor, getSeverityIcon } from '../utils/index';
+import {
+  MealPreferences,
+  FOOD_CATEGORIES,
+  ALLERGY_SEVERITIES,
+  DISLIKE_SEVERITIES,
+} from "../types/index";
+import { getSeverityColor, getSeverityIcon } from "../utils/index";
 
 interface SummaryProps {
   preferences: MealPreferences;
@@ -7,12 +12,13 @@ interface SummaryProps {
 }
 
 export const Summary = ({ preferences, onReset }: SummaryProps) => {
-  const { favoriteFood, dislikedFood, allergies, specialInstructions } = preferences;
+  const { favoriteFood, dislikedFood, allergies, specialInstructions } =
+    preferences;
 
-  const hasAnyData = 
-    favoriteFood.length > 0 || 
-    dislikedFood.length > 0 || 
-    allergies.length > 0 || 
+  const hasAnyData =
+    favoriteFood.length > 0 ||
+    dislikedFood.length > 0 ||
+    allergies.length > 0 ||
     specialInstructions.trim().length > 0;
 
   const handlePrint = () => {
@@ -24,12 +30,16 @@ export const Summary = ({ preferences, onReset }: SummaryProps) => {
       exportDate: new Date().toISOString(),
       mealPreferences: preferences,
     };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `meal-preferences-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `meal-preferences-${
+      new Date().toISOString().split("T")[0]
+    }.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -46,7 +56,9 @@ export const Summary = ({ preferences, onReset }: SummaryProps) => {
         <div className="text-center py-8 text-gray-500">
           <span className="text-4xl block mb-2">📝</span>
           <p>No meal preferences have been added yet.</p>
-          <p className="text-sm">Start by adding favorite foods, dislikes, or allergies above.</p>
+          <p className="text-sm">
+            Start by adding favorite foods, dislikes, or allergies above.
+          </p>
         </div>
       </div>
     );
@@ -86,7 +98,8 @@ export const Summary = ({ preferences, onReset }: SummaryProps) => {
 
       <div className="print:text-sm">
         <div className="text-xs text-gray-500 mb-4 print:mb-2">
-          Generated on {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
+          Generated on {new Date().toLocaleDateString()} at{" "}
+          {new Date().toLocaleTimeString()}
         </div>
 
         {/* Critical Allergies Section */}
@@ -97,14 +110,29 @@ export const Summary = ({ preferences, onReset }: SummaryProps) => {
             </h3>
             <div className="space-y-2">
               {allergies.map((allergy) => (
-                <div key={allergy.id} className="flex items-center gap-3 print:gap-2">
-                  <span className={`px-3 py-1 text-sm rounded-full border font-medium print:px-2 print:py-0 print:text-xs ${getSeverityColor(allergy.severity)}`}>
-                    <span className="mr-1">{getSeverityIcon(allergy.severity)}</span>
-                    {ALLERGY_SEVERITIES.find(s => s.value === allergy.severity)?.label}
+                <div
+                  key={allergy.id}
+                  className="flex items-center gap-3 print:gap-2"
+                >
+                  <span
+                    className={`px-3 py-1 text-sm rounded-full border font-medium print:px-2 print:py-0 print:text-xs ${getSeverityColor(
+                      allergy.severity
+                    )}`}
+                  >
+                    <span className="mr-1">
+                      {getSeverityIcon(allergy.severity)}
+                    </span>
+                    {
+                      ALLERGY_SEVERITIES.find(
+                        (s) => s.value === allergy.severity
+                      )?.label
+                    }
                   </span>
                   <span className="font-medium">{allergy.name}</span>
                   {allergy.isCommon && (
-                    <span className="text-xs text-blue-600 print:text-xs">(Common Allergy)</span>
+                    <span className="text-xs text-blue-600 print:text-xs">
+                      (Common Allergy)
+                    </span>
                   )}
                 </div>
               ))}
@@ -120,11 +148,17 @@ export const Summary = ({ preferences, onReset }: SummaryProps) => {
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 print:grid-cols-1">
               {favoriteFood.map((food) => (
-                <div key={food.id} className="flex items-center justify-between p-2 bg-green-50 rounded border border-green-200 print:border-green-400">
+                <div
+                  key={food.id}
+                  className="flex items-center justify-between p-2 bg-green-50 rounded border border-green-200 print:border-green-400"
+                >
                   <span className="font-medium">{food.name}</span>
                   {food.category && (
                     <span className="text-xs px-2 py-1 bg-green-200 text-green-800 rounded-full print:bg-transparent print:border print:border-green-600">
-                      {FOOD_CATEGORIES.find(c => c.value === food.category)?.label}
+                      {
+                        FOOD_CATEGORIES.find((c) => c.value === food.category)
+                          ?.label
+                      }
                     </span>
                   )}
                 </div>
@@ -141,15 +175,30 @@ export const Summary = ({ preferences, onReset }: SummaryProps) => {
             </h3>
             <div className="space-y-2">
               {dislikedFood.map((food) => (
-                <div key={food.id} className="flex items-center gap-3 p-2 bg-orange-50 rounded border border-orange-200 print:border-orange-400">
-                  <span className={`px-2 py-1 text-xs rounded-full border ${getSeverityColor(food.severity)}`}>
-                    <span className="mr-1">{getSeverityIcon(food.severity)}</span>
-                    {DISLIKE_SEVERITIES.find(s => s.value === food.severity)?.label}
+                <div
+                  key={food.id}
+                  className="flex items-center gap-3 p-2 bg-orange-50 rounded border border-orange-200 print:border-orange-400"
+                >
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full border ${getSeverityColor(
+                      food.severity
+                    )}`}
+                  >
+                    <span className="mr-1">
+                      {getSeverityIcon(food.severity)}
+                    </span>
+                    {
+                      DISLIKE_SEVERITIES.find((s) => s.value === food.severity)
+                        ?.label
+                    }
                   </span>
                   <span className="font-medium flex-1">{food.name}</span>
                   {food.category && (
                     <span className="text-xs px-2 py-1 bg-orange-200 text-orange-800 rounded-full print:bg-transparent print:border print:border-orange-600">
-                      {FOOD_CATEGORIES.find(c => c.value === food.category)?.label}
+                      {
+                        FOOD_CATEGORIES.find((c) => c.value === food.category)
+                          ?.label
+                      }
                     </span>
                   )}
                 </div>
@@ -179,20 +228,26 @@ export const Summary = ({ preferences, onReset }: SummaryProps) => {
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm print:text-xs print:grid-cols-2">
             <div className="text-center">
-              <div className="text-lg font-bold text-green-600 print:text-base">{favoriteFood.length}</div>
+              <div className="text-lg font-bold text-green-600 print:text-base">
+                {favoriteFood.length}
+              </div>
               <div className="text-gray-600">Favorite Foods</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-orange-600 print:text-base">{dislikedFood.length}</div>
+              <div className="text-lg font-bold text-orange-600 print:text-base">
+                {dislikedFood.length}
+              </div>
               <div className="text-gray-600">Disliked Foods</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-red-600 print:text-base">{allergies.length}</div>
+              <div className="text-lg font-bold text-red-600 print:text-base">
+                {allergies.length}
+              </div>
               <div className="text-gray-600">Allergies/Intolerances</div>
             </div>
             <div className="text-center">
               <div className="text-lg font-bold text-blue-600 print:text-base">
-                {specialInstructions.trim() ? '✓' : '✗'}
+                {specialInstructions.trim() ? "✓" : "✗"}
               </div>
               <div className="text-gray-600">Special Instructions</div>
             </div>

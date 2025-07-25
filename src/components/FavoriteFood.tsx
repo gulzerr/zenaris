@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { FoodItem, FoodCategory, FOOD_CATEGORIES } from '../types/index';
-import { getAriaLabel } from '../utils/index';
+import { useState } from "react";
+import { FoodItem, FoodCategory, FOOD_CATEGORIES } from "../types/index";
+import { getAriaLabel } from "../utils/index";
 
 interface FavoriteFoodProps {
   favoriteFood: FoodItem[];
@@ -15,22 +15,22 @@ export const FavoriteFood = ({
   onUpdate,
   onRemove,
 }: FavoriteFoodProps) => {
-  const [newFoodName, setNewFoodName] = useState('');
-  const [newFoodCategory, setNewFoodCategory] = useState<FoodCategory | ''>('');
+  const [newFoodName, setNewFoodName] = useState("");
+  const [newFoodCategory, setNewFoodCategory] = useState<FoodCategory | "">("");
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editName, setEditName] = useState('');
-  const [editCategory, setEditCategory] = useState<FoodCategory | ''>('');
+  const [editName, setEditName] = useState("");
+  const [editCategory, setEditCategory] = useState<FoodCategory | "">("");
 
   const handleAdd = () => {
     if (newFoodName.trim()) {
       onAdd(newFoodName, newFoodCategory || undefined);
-      setNewFoodName('');
-      setNewFoodCategory('');
+      setNewFoodName("");
+      setNewFoodCategory("");
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleAdd();
     }
   };
@@ -38,28 +38,28 @@ export const FavoriteFood = ({
   const startEdit = (food: FoodItem) => {
     setEditingId(food.id);
     setEditName(food.name);
-    setEditCategory(food.category || '');
+    setEditCategory(food.category || "");
   };
 
   const saveEdit = () => {
     if (editingId && editName.trim()) {
       onUpdate(editingId, editName, editCategory || undefined);
       setEditingId(null);
-      setEditName('');
-      setEditCategory('');
+      setEditName("");
+      setEditCategory("");
     }
   };
 
   const cancelEdit = () => {
     setEditingId(null);
-    setEditName('');
-    setEditCategory('');
+    setEditName("");
+    setEditCategory("");
   };
 
   const handleEditKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       saveEdit();
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       cancelEdit();
     }
   };
@@ -71,7 +71,8 @@ export const FavoriteFood = ({
         Favorite Foods
       </h2>
       <p className="text-gray-600 mb-4">
-        Add foods that this person enjoys eating. You can organize them by meal type.
+        Add foods that this person enjoys eating. You can organize them by meal
+        type.
       </p>
 
       {/* Add new favorite food */}
@@ -99,7 +100,9 @@ export const FavoriteFood = ({
             <select
               id="new-favorite-category"
               value={newFoodCategory}
-              onChange={(e) => setNewFoodCategory(e.target.value as FoodCategory | '')}
+              onChange={(e) =>
+                setNewFoodCategory(e.target.value as FoodCategory | "")
+              }
               className="input-field"
             >
               <option value="">Any meal</option>
@@ -114,13 +117,14 @@ export const FavoriteFood = ({
             onClick={handleAdd}
             disabled={!newFoodName.trim()}
             className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label={getAriaLabel('Add', 'favorite food')}
+            aria-label={getAriaLabel("Add", "favorite food")}
           >
             Add Food
           </button>
         </div>
         <p id="favorite-food-help" className="text-sm text-gray-500 mt-2">
-          Press Enter to quickly add, or select a meal category for better organization.
+          Press Enter to quickly add, or select a meal category for better
+          organization.
         </p>
       </div>
 
@@ -147,11 +151,13 @@ export const FavoriteFood = ({
                     onKeyPress={handleEditKeyPress}
                     className="input-field flex-1"
                     autoFocus
-                    aria-label={getAriaLabel('Edit', food.name)}
+                    aria-label={getAriaLabel("Edit", food.name)}
                   />
                   <select
                     value={editCategory}
-                    onChange={(e) => setEditCategory(e.target.value as FoodCategory | '')}
+                    onChange={(e) =>
+                      setEditCategory(e.target.value as FoodCategory | "")
+                    }
                     className="input-field w-32"
                   >
                     <option value="">Any meal</option>
@@ -181,10 +187,15 @@ export const FavoriteFood = ({
               ) : (
                 <>
                   <div className="flex-1">
-                    <span className="font-medium text-gray-800">{food.name}</span>
+                    <span className="font-medium text-gray-800">
+                      {food.name}
+                    </span>
                     {food.category && (
                       <span className="ml-2 px-2 py-1 text-xs bg-primary-100 text-primary-700 rounded-full">
-                        {FOOD_CATEGORIES.find(c => c.value === food.category)?.label}
+                        {
+                          FOOD_CATEGORIES.find((c) => c.value === food.category)
+                            ?.label
+                        }
                       </span>
                     )}
                   </div>
@@ -192,14 +203,14 @@ export const FavoriteFood = ({
                     <button
                       onClick={() => startEdit(food)}
                       className="text-blue-600 hover:text-blue-800 p-1"
-                      aria-label={getAriaLabel('Edit', food.name)}
+                      aria-label={getAriaLabel("Edit", food.name)}
                     >
                       ✏️
                     </button>
                     <button
                       onClick={() => onRemove(food.id)}
                       className="text-red-600 hover:text-red-800 p-1"
-                      aria-label={getAriaLabel('Remove', food.name)}
+                      aria-label={getAriaLabel("Remove", food.name)}
                     >
                       🗑️
                     </button>
